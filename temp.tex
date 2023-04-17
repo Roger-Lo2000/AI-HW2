@@ -59,8 +59,11 @@ right  = 2.50cm]{geometry}
 
 \section{Related Work}
 \subsection{Malware analysis}
+According to ~\cite{ref1}, malware analysis is the process of examining malicious software (malware) to understand its behavior and characteristics. It is an essential task for security researchers to identify and classify malware, as well as to develop effective countermeasures against them. There are two main types of malware analysis: static and dynamic.
 \subsubsection{Malware static analysis}
+Static analysis is a technique that involves reverse engineering, disassembling, or dissecting a binary file using tools such as disassemblers, decompilers, and hex editors. It allows analysts to examine the code, file structure, and other characteristics of the malware without executing it, in order to identify its behavior, functionality, and potential vulnerabilities. However, this method is susceptible to evasive techniques such as anti-disassembly, code obfuscation, and adversarial techniques. Despite these challenges, static analysis remains an important technique for malware analysis and is often used in conjunction with other methods to provide a more comprehensive understanding of the malware.
 \subsubsection{Malware dynamic analysis}
+Dynamic analysis is a technique that involves executing malware in a controlled environment, such as a sandbox or virtual machine, to observe its behavior and interactions with the system. Common tools used for malware dynamic analysis include debuggers, system monitors, and network traffic analyzers. This method is a behavioral approach that can provide valuable insights into the malware's activities. However, dynamic analysis is susceptible to evasive techniques such as anti-debugging and deferred execution. Despite these challenges, dynamic analysis is an important technique for malware analysis and is often used in conjunction with other methods to provide a more comprehensive understanding of the malware's behavior.
 \subsection{Malware visualisation}
 \subsection{Neural network} 
 With the increasing of computational capability of hardware, modern neural network architecture contains huge amount of parameters.
@@ -91,7 +94,7 @@ Figure 2. demonstrate the Siamese neural network.
 \section{Proposed Idea}
 With the advancement of automated malware generationa and obfuscation, 
 traditional detection to malware are gradually losing their effectiveness or applicability over time.
-In \cite{ref1} \textit{Mingdong et al.} proposed an idea to extract API calls using dynamic analysis and then 
+In \cite{ref2} \textit{Mingdong et al.} proposed an idea to extract API calls using dynamic analysis and then 
 map it into feature image based on colour mapping rules. They trained a CNN model to classify 9 class of malware families.
 and 1000 variants. Figure 3. shows the overview of dynamic API call malware detection.
 \begin{figure}
@@ -108,7 +111,11 @@ we proposed and new idea that is to switch CNN into \textbf{Siamese neural netwo
 
 \section{Expected Result}
 Due to the challenges of collecting large and diverse datasets on rapid evolution of Malware, traditional Convolution Neural Network(CNNs) may struggle to fully show their strenths.As mention in our Related Work ,Siamese neural network have been widely using in image or text matching,and are known for their adaptability to small or High variability datasets.Therefore,based on our New idea we'll attempt to utilize Siamese neural networks with few shot learing to achieve a better accuracy then CNNs.
-\begin{thebibliography}{99}  
-    \bibitem{ref1}Mingdong Tang, Quan Qain.: 'Dynamic API call sequence visualisation for malware classification'. IET information security, 2019: 1751-8709.  
+
+
+\begin{thebibliography}{99}
+    \bibitem{ref1} A. D. Raju, I. Y. Abualhaol, R. S. Giagone, Y. Zhou and S. Huang, "A Survey on Cross-Architectural IoT Malware Threat Hunting," in IEEE Access, vol. 9, pp. 91686-91709, 2021, doi: 10.1109/ACCESS.2021.3091427.
+    \bibitem{ref2} Tang, M., Qian, Q. (2019). Dynamic API call sequence visualisation for malware classification. IET Information Security, 13(4), 367-377.  
 \end{thebibliography}
 \end{document}
+
