@@ -27,6 +27,8 @@ right  = 2.50cm]{geometry}
 \usepackage{subfigure}
 \usepackage{float} 
 \usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \definecolor{codegreen}{rgb}{0,0.,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.4,0,0.5}
@@ -63,6 +65,8 @@ Siamese neural networks are widely used for image or text matching and are known
 This research aims to provide more accurate and efficient methods for malware analysis through this approach.
 
 \section{Related Work}
+In this section, we'll discuss about malware analysis int static and dynamic type, malware visualisation and neural network which is
+required knowledge for this study.
 \subsection{Malware analysis}
 According to ~\cite{ref1}, malware analysis is the process of examining malicious software (malware) to understand its behavior and characteristics. It is an essential task for security researchers to identify and classify malware, as well as to develop effective countermeasures against them. There are two main types of malware analysis: static and dynamic.
 \subsubsection{Malware static analysis}
@@ -70,10 +74,12 @@ Static analysis is a technique that involves reverse engineering, disassembling,
 \subsubsection{Malware dynamic analysis}
 Dynamic analysis is a technique that involves executing malware in a controlled environment, such as a sandbox or virtual machine, to observe its behavior and interactions with the system. Common tools used for malware dynamic analysis include debuggers, system monitors, and network traffic analyzers. This method is a behavioral approach that can provide valuable insights into the malware's activities. However, dynamic analysis is susceptible to evasive techniques such as anti-debugging and deferred execution. Despite these challenges, dynamic analysis is an important technique for malware analysis and is often used in conjunction with other methods to provide a more comprehensive understanding of the malware's behavior.
 \subsection{Malware visualisation}
+For now, various visualization techniques for malware analysis are proposed to support human analysts in quickly assessing and classifying new malware samples. Malware visualization includes two main categories: visualization based on static analysis or dynamic analysis. Static analysis, by analyzing malware code, binaries, or other data to generate a visual graphical representation. Static visualization is often used by malware analysis for quick initial analysis when researching new malware samples. Dynamic analysis, by monitoring the running behavior of malware on the infected computer generates a visual graphical representation. Dynamic visualization is often used to help security analysis better understand how the malware operates, identify its behavioral patterns, and grasp its attack tactics.
+\cite{ref2} shows an idea to detect malare based on image proccess techniques.
 \subsection{Neural network} 
 With the increasing of computational capability of hardware, modern neural network architecture contains huge amount of parameters.
 Neural network have achieved tremendous performance on regression, classification and generation problem.
-In this section we introduce two kind of architecture. One isConvolutional Neural Network, and another one is so called Siamese Neural Network.
+In this section we introduce two kind of architecture. One is Convolutional Neural Network, and another one is so called Siamese Neural Network.
 \subsubsection{Convolutional neural network}
 Convolutional Neural Network (CNN) is a type of deep neural network commonly used for image recognition and processing. 
 CNNs consist of several layers, including convolutional layers, pooling layers, and fully connected layers. In the convolutional layers, the network applies a set of learnable filters to the input image, 
@@ -99,7 +105,7 @@ Figure 2. demonstrate the Siamese neural network.
 \section{Proposed Idea}
 With the advancement of automated malware generationa and obfuscation, 
 traditional detection to malware are gradually losing their effectiveness or applicability over time.
-In \cite{ref2} \textit{Mingdong et al.} proposed an idea to extract API calls using dynamic analysis and then 
+In \cite{ref3} \textit{Mingdong et al.} proposed an idea to extract API calls using dynamic analysis and then 
 map it into feature image based on colour mapping rules. They trained a CNN model to classify 9 class of malware families.
 and 1000 variants. Figure 3. shows the overview of dynamic API call malware detection.
 \begin{figure}
@@ -107,22 +113,54 @@ and 1000 variants. Figure 3. shows the overview of dynamic API call malware dete
     \caption{CNN architecture}
 \end{figure}
 \subsection{Malware API extraction}
+Use Cuckoo Sandbox to analyze files. This software creates a virtual environment to safely run the suspicious file and records the API taken by the file.
 \subsection{Colour mapping rules}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{fig/API CAT.png}
+    \caption{API categories}
+    \label{fig:apicat}
+\end{figure}
+Before mapping API sequences to images, we need to categorize APIs based on their functionality. In addition to categorizing APIs based on their functionality, we also consider their frequency and sensitivity.
+Specifically, our classification is as Fig.~\ref{fig:apicat}.
+
+After we got API categories, we divide the time of the program's execution into small units and map the usage of each API category to a different color depending on how frequently they are called during each unit time. We use bright colors to represent API categories that are called frequently and are considered high risk. If an API category is not used during a unit time, we represent it with white. We then use these color mappings to create a feature image that represents the behavior of a malware sample. This image has a horizontal axis that represents time and a vertical axis that represents API categories. We use 16 categories and 16 unit times to create 16x16 pixel-sized feature images for each malware sample. The detailed process of how we map API sequences to feature images is given in Algorithm ~\ref{alg:api2img}.
+
+\begin{algorithm}
+\caption{Mapping API seq to image}
+\label{alg:api2img}
+\begin{algorithmic}[1]
+\Require API call sequence, $ST$(program start time), $ET$(program end time)
+\Ensure Image
+\State $S_k$ is an empty set to store API call sequence fragment, and $k$ = 16;
+\State $Cj$ is an empty set to store color value for each API category, and j = 16;
+\State Get API sequence of each unit time
+\For{each $k \in [0,15]$}
+    \State Counting the number of occurrences of each API category
+    \For{each $j \in [0,15]$}
+        \State Image[k][j] $\leftarrow$ ColorMapping(Cj)
+    \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 \subsection{New idea}
 To collect huge dataset for malware API call is not easy. To reduce the dataset demand for training neural network, 
 we proposed and new idea that is to switch CNN into \textbf{Siamese neural network for few-shot training}.
 
+First of all, we'll collect data from \textbf{VirusShare}, 
+and then use a sandbox to simulate dynamic API calls. We will transform to malware image, each image will be trained and tested by Siamese network for detecting malware.
 
 
 \section{Expected Result}
-Due to the challenges of collecting large and diverse datasets on rapid evolution of Malware, traditional Convolution Neural Network(CNNs) may struggle to fully show their strenths.
-As mention in our Related Work ,Siamese neural network have been widely using in image or text matching,and are known for their adaptability to small or High variability datasets.
-Therefore,based on our New idea we'll attempt to utilize Siamese neural networks with few shot learing to achieve a better accuracy then CNNs.
-
+Due to the challenges of collecting large and diverse datasets on rapid evolution of Malware, traditional Convolution Neural Network (CNNs) may struggle to fully show their strenths.
+As mention in our Related Work, Siamese neural network have been widely using in image or text matching, and are known for their adaptability to small or High variability datasets.
+Therefore, based on our New idea we'll attempt to utilize Siamese neural networks with few shot learing to achieve a better accuracy then CNNs.
+We expect to get more accuracy compare to CNN models with small datasets.
 
 \begin{thebibliography}{99}
     \bibitem{ref1} A. D. Raju, I. Y. Abualhaol, R. S. Giagone, Y. Zhou and S. Huang, "A Survey on Cross-Architectural IoT Malware Threat Hunting," in IEEE Access, vol. 9, pp. 91686-91709, 2021, doi: 10.1109/ACCESS.2021.3091427.
-    \bibitem{ref2} Tang, M., Qian, Q. (2019). Dynamic API call sequence visualisation for malware classification. IET Information Security, 13(4), 367-377.  
+    \bibitem{ref2} Nataraj, Lakshmanan, Karthikeyan, Shanmugavadivel, Jacob, Grégoire, Manjunath, B.. (2011). Malware Images: Visualization and Automatic Classification. 10.1145/2016904.2016908. 
+    \bibitem{ref3} Tang, M., Qian, Q. (2019). Dynamic API call sequence visualisation for malware classification. IET Information Security, 13(4), 367-377.  
 \end{thebibliography}
 \end{document}
 
